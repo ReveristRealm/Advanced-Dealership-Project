@@ -28,7 +28,8 @@ public class UserInterface {
             System.out.println("7] Get All Vehicles");
             System.out.println("8] Add a vehicle");
             System.out.println("9] Remove a vehicle");
-            System.out.println("10] Exit");
+            System.out.println("10] Sell/Lease a vehicle");
+            System.out.println("11] Exit");
 
             int pickthis = userInput.nextInt();
             switch (pickthis){
@@ -80,6 +81,9 @@ public class UserInterface {
                     processRemoveVehicleRequest();
                     break;
                 case 10:
+
+                    break;
+                case 11:
                     return;
                 default:
                     break;
