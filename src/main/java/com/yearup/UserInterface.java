@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class UserInterface {
     static Scanner userInput =  new Scanner(System.in);
     private Dealership dealership;
+
     public UserInterface() {
     }
     public void display(){
@@ -81,7 +82,7 @@ public class UserInterface {
                     processRemoveVehicleRequest();
                     break;
                 case 10:
-
+                    processSellandLeaseCar();
                     break;
                 case 11:
                     return;
@@ -158,9 +159,66 @@ public class UserInterface {
             System.out.println("hi");
         }
     }
+    public void processSellandLeaseCar(){
+        System.out.println("Do you want to Sell or lease a Car");
+        String response = userInput.next();
+        if(response.equalsIgnoreCase("Sell")){
+                System.out.println("What is the persons name?");
+                String name = userInput.next();
+                System.out.println("What is the date of this transaction (YYYYMMDD)?");
+                String date = userInput.next();
+                System.out.println("What is their email?");
+                String email = userInput.next();
+                displayVehicles(dealership.getAllVehicle());
+                System.out.println("What car do they want (enter vin) ?");
+                int chosen = userInput.nextInt();
+                Vehicle vehicle = null;
+                for (Vehicle car : dealership.getInventory()) {
+                    if (car.getVin() == chosen) {
+                        vehicle = car;
+                    }
+                }
+                SalesContract contract = new SalesContract(date, name, email, vehicle);
+                processRemoveVehicleFromFile(chosen);
+        }
+        if(response.equalsIgnoreCase("Lease")){
+            System.out.println("What is the persons name?");
+            String name = userInput.next();
+            System.out.println("What is the date of this transaction (YYYYMMDD)?");
+            String date = userInput.next();
+            System.out.println("What is their email?");
+            String email = userInput.next();
+            displayVehicles(dealership.getAllVehicle());
+            System.out.println("What car do they want (enter vin) ?");
+            int chosen = userInput.nextInt();
+            Vehicle vehicle = null;
+            for (Vehicle car : dealership.getInventory()) {
+                if (car.getVin() == chosen) {
+                    vehicle = car;
+                }
+            }
+            LeaseContract contract = new LeaseContract(date, name, email, vehicle);
+            processRemoveVehicleFromFile(chosen);
+        }
+    }
     private void displayVehicles(ArrayList<Vehicle> inventory){
         for(Vehicle cars: inventory){
             System.out.println(cars);
+        }
+    }
+    public void processRemoveVehicleFromFile(int vin){
+        String filepath = "Database.csv";
+        dealership.removeVehicle(vin);
+        try{
+            List<String> lines = Files.readAllLines(Path.of(filepath));
+
+            String useVin = String.valueOf(vin);
+
+            lines = lines.stream().filter(line -> !line.contains(useVin)).collect(Collectors.toList());
+
+            Files.write(Path.of(filepath), lines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+        }catch(IOException e ){
+            System.out.println("hi");
         }
     }
 }

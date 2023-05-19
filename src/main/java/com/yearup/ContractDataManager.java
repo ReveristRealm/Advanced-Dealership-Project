@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ContractDataManager {
+
     public void saveContract(Contract contract) {
 
         try{
@@ -22,7 +23,7 @@ public class ContractDataManager {
                         contract.getSold().getVehicleType() + "|" + contract.getSold().getColor() + "|" + contract.getSold().getOdometer() + "|" + contract.getSold().getPrice()
                         + "|" + ((LeaseContract) contract).getExEndVal() + "|" + ((LeaseContract) contract).getLeaseFee() + "|" + contract.getTotalPrice() + "|" + contract.getMonthlyPayment());
             }
-
+            writer.close();
         }catch(IOException e){
             System.out.println("Could not find file");
         }
